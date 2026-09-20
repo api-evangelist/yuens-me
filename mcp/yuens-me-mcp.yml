@@ -1,0 +1,80 @@
+generated: '2026-09-19'
+method: probed
+status: published
+source: https://agent.yuens.me/public-mcp
+docs: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
+summary: >-
+  Sunny Yuen operates a public, anonymous, remote MCP server at https://agent.yuens.me/public-mcp
+  (Streamable HTTP, stateless, MCP protocol revision 2025-03-26) exposing ONE tool, ask_candidate, which
+  answers natural-language questions about the published professional profile. tools/list succeeded without
+  credentials on 2026-09-19 and the real inputSchema is saved verbatim in mcp/yuens-me-public-mcp-tools.json.
+  A second, private MCP server at https://agent.yuens.me/mcp is documented for the profile owner only
+  (OAuth 2.0 or x-brain-key) and is not a third-party agent surface.
+deployment:
+  mode: remote
+  endpoint: https://agent.yuens.me/public-mcp
+  auth: none
+  verified: probed
+  note: >-
+    A hosted HTTPS endpoint an MCP client POSTs to directly; the provider documents adding it as a custom
+    connector in claude.ai / Claude Desktop / Cursor with the auth fields left blank. No stdio package is
+    shipped or documented for the public server (the source repo is a server, private: true in package.json,
+    not an npm client). The private server's Claude Desktop recipe uses the generic mcp-remote bridge
+    (npx -y mcp-remote https://agent.yuens.me/mcp --header x-brain-key:…), which is a bridge to the remote
+    server, not a stdio distribution of it.
+servers:
+  - id: resume-agent-public
+    name: resume-agent-public
+    endpoint: https://agent.yuens.me/public-mcp
+    transport: streamable-http
+    stateless: true
+    auth: none
+    status: live
+    probe:
+      fetched: '2026-09-19'
+      initialize:
+        http_status: 200
+        content_type: text/event-stream
+        protocol_version: '2025-03-26'
+        server_info: {name: resume-agent-public, version: 1.0.0}
+        capabilities: {tools: {listChanged: true}}
+        session_header: 'none returned (stateless; the server documents itself as offering no server->client SSE stream)'
+      tools_list:
+        http_status: 200
+        content_type: text/event-stream
+        tool_count: 1
+        file: mcp/yuens-me-public-mcp-tools.json
+      get_without_accept_sse:
+        http_status: 200
+        content_type: application/json
+        note: 'A plain GET returns a self-descriptor (transport, tool, argument shape, example JSON-RPC call); a GET carrying Accept text/event-stream is documented to return 405 + Allow POST.'
+      cors: 'access-control-allow-origin: *; allow-headers authorization, content-type, x-brain-key, accept, mcp-session-id'
+    rate_limit: '30 requests per minute per IP, a bucket shared with POST /query (see rate-limits/yuens-me-rate-limits.yml)'
+    tools:
+      - name: ask_candidate
+        title: Ask the Candidate
+        read_only: true
+        task_support: forbidden
+        input_schema:
+          question: "string (required) — natural-language question about the candidate"
+          context: 'string (optional) — caller context such as "ATS", "recruiter", "ai-agent"; adjusts tone; may carry "; shown_projects: slug1, slug2" to page through projects'
+          stream: "boolean (optional) — stream progressively via MCP progress notifications"
+        additional_properties: false
+        source_operation: openapi/yuens-me-openapi.yml#queryProfile
+        description: >-
+          Ask a natural-language question about this candidate's skills, experience, or background. Responses
+          are grounded in the candidate's canonical published profile — not inferred by the calling AI.
+  - id: resume-agent-private
+    name: private MCP (profile owner only)
+    endpoint: https://agent.yuens.me/mcp
+    transport: streamable-http
+    auth: oauth
+    status: documented-not-probed
+    note: >-
+      Documented in the source README for the profile owner's own use: OAuth 2.0 authorization_code + PKCE
+      (S256), client_credentials and refresh_token grants, all requiring client_secret_post, per
+      /.well-known/oauth-authorization-server; or an x-brain-key header. An anonymous GET on 2026-09-19
+      returned 404 text/plain, and no anonymous tools/list was attempted because the surface is explicitly
+      private. The README lists 27 tools (Open Brain capture/search, job-pipeline tracking, application
+      evidence, and summarize_observed_queries observability); they are the owner's write surface, not a
+      public agent capability, and are not crosswalked.

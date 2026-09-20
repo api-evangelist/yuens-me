@@ -1,0 +1,107 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://github.com/yuens1002/resume-agent (README: Public API endpoints, Security model, Add as a custom
+  connector) cross-checked against openapi/yuens-me-openapi.yml and live responses from https://agent.yuens.me
+  on 2026-09-19 (GET self-descriptors on /query, /match, /public-mcp; POST validation errors; response headers).
+description: >-
+  Cross-cutting behaviour of the Resume Agent API: an anonymous, read-only-in-effect JSON surface with one
+  per-IP ceiling, Zod validation envelopes, limit-only paging with an honest truncation flag, streaming as
+  an opt-in text/plain mode, and GET self-descriptors on POST endpoints so a crawler that follows an
+  advertised URL learns how to call it.
+base_url: https://agent.yuens.me
+api_style: REST over HTTPS, JSON requests and responses (Hono / Zod)
+authentication:
+  scheme: none on the public surface
+  detail: authentication/yuens-me-authentication.yml
+  note: >-
+    All six public operations and the public MCP server are anonymous. Credentials exist only for the
+    profile owner (Bearer API key on /resume, OAuth 2.0 or x-brain-key on the private /mcp) and double as
+    rate-limit bypass tokens.
+idempotency:
+  supported: false
+  coverage: na
+  mechanism: none
+  applies_to: []
+  note: >-
+    There is no state-mutating public operation. POST /query and POST /match carry a question or job
+    description and return a computed answer; repeating either produces a fresh answer with no side effect a
+    consumer can observe (the operator logs query telemetry server-side). With no write surface, idempotency,
+    dry-run and reversibility are all not applicable rather than absent.
+dry_run_mode:
+  supported: na
+  note: No write surface to rehearse.
+reversibility:
+  grade: na
+  write_surfaces: []
+  note: >-
+    Read-only for third parties: nothing a caller does through the public API creates, changes or deletes a
+    resource, so there is nothing to reverse. The owner-only private MCP tools (capture_thought,
+    update_thought, delete_thought — "Permanently delete … No soft-delete") are the operator's own surface and
+    are out of scope for a consumer-facing reversibility grade.
+pagination:
+  style: limit-only (no cursor, no offset)
+  operations: [listObservations]
+  request_params:
+    limit: "1-500, default 25"
+    topic: OB1 topic tag filter, case-insensitive
+    type: observation | idea | task | reference (default excludes reference)
+    since: YYYY-MM-DD lower bound
+    authored: "1/true/yes or 0/false/no; applied before limit; echoed in the envelope only when requested"
+  response_fields:
+    count: items returned
+    total: items matching the filters
+    truncated: whether limit cut the list short
+    authored: "echo of the filter — present only when requested, so its absence identifies a deployment predating the field"
+  docs: https://github.com/yuens1002/resume-agent#get-observations--get-observationsid
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+request_tracing:
+  request_id_header: x-railway-request-id
+  note: Set by the Railway edge on every response (also x-hikari-trace, x-railway-edge); not a documented API convention and not echoed in bodies.
+versioning:
+  scheme: unversioned paths; info.version 1.0.0, card 1.3.0, codebase 0.4.129
+  mechanism: none
+  detail: lifecycle/yuens-me-lifecycle.yml
+  changelog: changelog/yuens-me-changelog.yml
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  shape: '{ "success": false, "error": { "issues": [ { code, expected, received, path[], message } ], "name": "ZodError" } }'
+  auth_shape: '{ "error": "Unauthorized" }'
+  not_found: text/plain "404 Not Found"
+  detail: errors/yuens-me-problem-types.yml
+rate_limits:
+  signal_status: 429
+  ceiling: 30 requests per minute per IP, every route except OPTIONS and /health; /query and /public-mcp share one bucket
+  headers: none documented or observed
+  detail: rate-limits/yuens-me-rate-limits.yml
+  docs: https://github.com/yuens1002/resume-agent#security-model
+streaming:
+  rest: 'POST /query with "stream": true (or GET /query?question=…&stream=true) returns chunked text/plain instead of JSON; stream mode always uses the cited style.'
+  mcp: ask_candidate with stream true emits MCP progress notifications.
+  a2a_card: capabilities.streaming true; pushNotifications false (no webhooks, no callbacks).
+content_negotiation:
+  x-agent-type: 'A request header of "human" selects the conversational answer style; the JSON body field style ("cited" | "conversational") does the same.'
+  context: 'The optional context string ("ATS", "recruiter", "ai-agent") adjusts tone and, with "; shown_projects: slug1, slug2", pages through projects across follow-up calls.'
+cors:
+  access_control_allow_origin: '*'
+  mcp_allow_headers: authorization, content-type, x-brain-key, accept, mcp-session-id
+caching:
+  agent_card: public, max-age=300
+  health: no-store (documented)
+discovery:
+  self_descriptors: 'GET /query, GET /match and GET /public-mcp answer 200 with {endpoint, method, body, response, example} rather than 405, so an agent that fetches an advertised URL learns the working call; a GET on /public-mcp with Accept text/event-stream gets 405 + Allow POST per the MCP spec.'
+  root_alias: GET / returns the agent card.
+  machine_docs: [https://agent.yuens.me/openapi.json, https://agent.yuens.me/.well-known/agent-card.json, https://www.yuens.me/llms.txt]
+webhooks:
+  supported: false
+other_conventions:
+  - name: Citations
+    detail: 'Every factual claim in a cited-style answer carries an inline [N] marker and the answer ends with a Sources block mapping markers to corpus paths (projects.<slug>, experience.<company>.bullets[N], observations:"<excerpt>", publications.<slug>).'
+  - name: Confidence and refusal
+    detail: Answers carry confidence high|medium|low; off-topic, no-data and adversarial questions resolve to a factual decline rather than a fabricated answer (docs/query-engagement-rules.md).
+  - name: Personal data
+    detail: The API intentionally publishes one person's professional profile for employer AI systems. Consumers should treat contact objects as personal data — use them for the stated purpose and do not redistribute or cache them beyond the request.

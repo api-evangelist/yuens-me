@@ -1,0 +1,70 @@
+generated: '2026-09-19'
+method: derived
+source: openapi/yuens-me-openapi.yml (https://agent.yuens.me/openapi.json) response schemas plus the README's endpoint descriptions; no live profile data was copied.
+description: >-
+  A single-candidate data model: one Profile owns the structured snapshot, Projects and Observations are the
+  evidence layer, and two computed results (QueryAnswer, MatchResult) cite back into it by slug. There are no
+  ids in the public contract apart from Observation ids and Project / Publication slugs; the schemas are
+  inline (components.schemas is empty), so relationships below are read from field names.
+entities:
+  - name: Profile
+    operation: getProfile
+    fields: ['contact', 'summary', 'tagline', 'skills[]', 'employment[]', 'education[]', 'projects[]', 'publications[]', 'availability']
+    note: contact is an object of the person's published contact details; treat as personal data and never cache it beyond the request.
+  - name: Availability
+    operation: getAvailability
+    fields: ['seeking', 'status(open|actively-looking|not-looking)', 'preferred_roles[]', 'remote']
+  - name: Project
+    operation: listProjects
+    key: slug
+    fields: ['name', 'slug', 'description', 'role', 'tech[]', 'status', 'started', 'url', 'repo', 'cover']
+  - name: Observation
+    operation: listObservations
+    key: id
+    fields: ['id', 'type(observation|idea|task|reference)', 'authored(boolean)', 'topics', 'date', 'content']
+    url_pattern: https://agent.yuens.me/observations/{id}
+    envelope: '{count, total, truncated, scope, types, authored?, note, observations[]}'
+  - name: Publication
+    key: slug
+    fields: [slug, title, platform, canonical_url, date]
+    note: Appears inline in Profile.publications[] and in QueryAnswer.publications[]; no standalone endpoint.
+  - name: QueryAnswer
+    operation: queryProfile
+    computed: true
+    fields: ['answer', 'confidence(high|medium|low)', 'sources[]', 'project_slugs[]', 'publications[]', 'follow_up_suggestions[]', 'action_intent{tool}?', 'fit_question']
+  - name: MatchResult
+    operation: matchJob
+    computed: true
+    fields: ['fit_score(0-1)', 'matched[]', 'gaps[]', 'verdict', 'recommended_action(apply|apply-with-tailoring|pass)', 'scoring{required_qualities[], scored_qualities[]}']
+relationships:
+  - from: Profile
+    to: Project
+    type: has_many
+    via: projects[]
+  - from: Profile
+    to: Publication
+    type: has_many
+    via: publications[]
+  - from: Profile
+    to: Availability
+    type: has_one
+    via: availability
+  - from: QueryAnswer
+    to: Project
+    type: belongs_to
+    via: project_slugs[] -> Project.slug
+  - from: QueryAnswer
+    to: Publication
+    type: belongs_to
+    via: publications[].slug -> Publication.slug
+  - from: QueryAnswer
+    to: Observation
+    type: references
+    via: 'sources[] entries of the form observations:"<excerpt>" (prose citation, not an id)'
+  - from: MatchResult
+    to: Profile
+    type: belongs_to
+    via: scored_qualities[].evidence_grade (verified = backed by a dated project or employment record)
+identifiers:
+  slug: lowercase kebab-case project / publication key (e.g. resume-agent, brew-guide)
+  observation_id: opaque stable id, individually addressable at /observations/{id}

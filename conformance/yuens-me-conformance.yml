@@ -1,0 +1,108 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  Live probes of agent.yuens.me, www.yuens.me and yuens.me on 2026-09-19 (well-known documents, MCP
+  initialize/tools/list, DNS TXT) cross-checked against openapi/_original/yuens-me-resume-agent-openapi.json
+  and the source README at https://github.com/yuens1002/resume-agent.
+standards:
+  - id: openapi-3.1
+    name: OpenAPI 3.1
+    conforms: true
+    evidence: >-
+      https://agent.yuens.me/openapi.json (HTTP 200, application/json) declares "openapi": "3.1.0" with 6 paths,
+      6 operations, unique operationIds, inline schemas and servers[] https://agent.yuens.me.
+  - id: a2a-1.0
+    name: A2A Agent Card 1.0.0
+    conforms: true
+    evidence: >-
+      https://agent.yuens.me/.well-known/agent-card.json (HTTP 200) passes all three hard checks (capabilities
+      object, protocolVersion "1.0", skills array of 5). Graded conformant in a2a/yuens-me-a2a.yml with the
+      caveat that no A2A JSON-RPC endpoint is served — the card is discovery over a REST + MCP agent.
+  - id: mcp-2025-03-26
+    name: Model Context Protocol (Streamable HTTP, revision 2025-03-26)
+    conforms: true
+    evidence: >-
+      POST initialize and tools/list to https://agent.yuens.me/public-mcp returned 200 text/event-stream
+      JSON-RPC results with protocolVersion 2025-03-26, serverInfo resume-agent-public 1.0.0 and one tool
+      with a draft-07 inputSchema. Stateless: no Mcp-Session-Id issued.
+  - id: rfc8414
+    name: RFC 8414 OAuth 2.0 Authorization Server Metadata
+    conforms: true
+    evidence: >-
+      https://agent.yuens.me/.well-known/oauth-authorization-server returned 200 with issuer, authorization
+      and token endpoints, response_types [code], grant_types [authorization_code, client_credentials,
+      refresh_token], code_challenge_methods [S256], token_endpoint_auth_methods [client_secret_post].
+    caveat: No scopes_supported, registration_endpoint or jwks_uri; the token endpoint answers GET with 404 (POST-only is fine, but it was not exercised).
+  - id: rfc9728
+    name: RFC 9728 OAuth 2.0 Protected Resource Metadata
+    conforms: true
+    evidence: >-
+      https://agent.yuens.me/.well-known/oauth-protected-resource returned 200 naming resource
+      https://agent.yuens.me, authorization_servers [https://agent.yuens.me] and bearer_methods_supported
+      [header]. The protected resource is the private /mcp server, not the public API.
+  - id: oauth2
+    name: OAuth 2.0 (authorization code + PKCE, client credentials, refresh token)
+    conforms: true
+    evidence: >-
+      Declared in the authorization-server metadata and documented in the README security model for the
+      private MCP server; every grant requires client_secret_post. The six public operations and the public
+      MCP server are anonymous, so OAuth does not govern any third-party surface.
+  - id: rfc8615
+    name: RFC 8615 Well-Known URIs
+    conforms: true
+    evidence: agent-card.json, oauth-authorization-server, oauth-protected-resource and oep-public-key.json are all served under /.well-known/ on agent.yuens.me with real 404s for unknown names.
+  - id: oep-1
+    name: Open Employment Protocol Phase 1 domain verification (oep1)
+    conforms: true
+    evidence: >-
+      _oep.yuens.me TXT "v=oep1; alg=ed25519; fp=bZCBY6x_RnGLyQgnCY0lN7CvpiBZMvRUBo68oeisPYc" matches the
+      fingerprint in https://agent.yuens.me/.well-known/oep-public-key.json and provider.identity.fingerprint in
+      the agent card (all three read 2026-09-19). OEP is the operator's own open protocol
+      (github.com/yuens1002/open-employment-protocol), not an industry standard; recorded as self-declared.
+  - id: llms-txt
+    name: llms.txt
+    conforms: true
+    evidence: https://www.yuens.me/llms.txt returned 200 text/plain (3,902 bytes) naming the query endpoints, MCP endpoint, agent card and OpenAPI; saved verbatim to llms/yuens-me-llms.txt.
+  - id: schema-org-jsonld
+    name: schema.org JSON-LD (ProfilePage / Person)
+    conforms: true
+    evidence: The www.yuens.me HTML carries an application/ld+json ProfilePage with a Person mainEntity, sameAs and subjectOf CreativeWork entries for each project including the Resume Agent (url https://agent.yuens.me).
+  - id: robots-ai-allow
+    name: robots.txt with explicit AI-crawler allow list
+    conforms: true
+    evidence: Both www.yuens.me/robots.txt and agent.yuens.me/robots.txt (200) allow all agents and name GPTBot, ClaudeBot, anthropic-ai, PerplexityBot, Google-Extended and others explicitly; www lists a Sitemap.
+  - id: oidc-discovery
+    name: OpenID Connect Discovery 1.0
+    conforms: false
+    evidence: /.well-known/openid-configuration is 404 on agent.yuens.me and yuens.me; www.yuens.me returns its SPA shell (not a document).
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence: Validation errors use a Zod envelope {success:false, error:{issues[], name}} as application/json; 404s are text/plain. See errors/yuens-me-problem-types.yml.
+  - id: rfc9116
+    name: RFC 9116 security.txt
+    conforms: false
+    evidence: /.well-known/security.txt is 404 on agent.yuens.me and yuens.me; www.yuens.me returns its SPA shell.
+  - id: rfc9727
+    name: RFC 9727 API Catalog
+    conforms: false
+    evidence: /.well-known/api-catalog is 404 on agent.yuens.me and yuens.me; www.yuens.me returns its SPA shell.
+  - id: apis-json
+    name: APIs.json
+    conforms: false
+    evidence: /apis.json, /apis.yml and /.well-known/apis.json are 404 on agent.yuens.me and yuens.me; www.yuens.me returns its SPA shell.
+  - id: pagination
+    name: Pagination
+    conforms: partial
+    evidence: listObservations takes limit (1-500, default 25) and returns count/total/truncated so a consumer can tell a capped page from a complete one, but there is no cursor or offset — the ceiling is deliberately high enough to fetch everything in one call.
+  - id: idempotency
+    name: Idempotency keys
+    conforms: na
+    evidence: The public surface has no state-mutating operation; POST /query and POST /match are stateless computations. See conventions/yuens-me-conventions.yml.
+domain_standard:
+  market: hiring / professional profile
+  declared: none
+  note: >-
+    The contract declares no recognised hiring-domain standard (no HR Open Standards / HR-XML, no
+    JSON Resume schema, no LinkedIn or ATS interchange format). OEP is the operator's own emerging protocol and
+    is recorded above as self-declared, not as domain_standard_conformance. Reward-only; nothing is claimed.

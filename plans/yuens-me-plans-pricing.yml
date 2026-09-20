@@ -1,0 +1,13 @@
+generated: '2026-09-19'
+method: searched
+source: https://github.com/yuens1002/resume-agent (README) and https://www.yuens.me/llms.txt
+plan_count: 0
+currency: null
+model: free
+summary: >-
+  No plans, pricing or paid tier exist. The Resume Agent API is a personal, self-sovereign professional
+  agent operated by one individual; every public endpoint is free and anonymous, bounded only by the 30
+  req/min per-IP ceiling. The software is MIT-licensed and "fork-ready" — the README's commercial posture is
+  that anyone may deploy their own instance, not that access to this one is sold. Checked www.yuens.me
+  (every path returns the SPA shell; no pricing route in the sitemap) and the agent host (no /pricing).
+plans: []

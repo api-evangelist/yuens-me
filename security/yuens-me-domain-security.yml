@@ -1,0 +1,20 @@
+generated: '2026-09-19'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: yuens.me
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec 13 18:49:20 2026 GMT
+  hsts: null
+- host: agent.yuens.me
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 22 22:10:15 2026 GMT
+  hsts: false
+domains:
+- domain: yuens.me
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: false

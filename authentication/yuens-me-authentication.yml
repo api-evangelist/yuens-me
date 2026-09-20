@@ -1,0 +1,92 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://github.com/yuens1002/resume-agent#security-model, the live RFC 8414 / RFC 9728 documents at
+  https://agent.yuens.me/.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource,
+  and anonymous probes of every public operation on 2026-09-19. openapi/yuens-me-openapi.yml declares no
+  securitySchemes and no security requirement, which is accurate for the public surface, so the derive
+  script produced nothing and this profile is docs-sourced.
+docs: https://github.com/yuens1002/resume-agent#security-model
+summary: >-
+  The third-party surface is anonymous: all six REST operations, the OpenAPI document, the agent card and the
+  public MCP server answered 200 with no credential. Credentials exist only for the profile owner — a Bearer
+  API key on POST /resume, an x-brain-key header or an OAuth 2.0 access token on the private /mcp server —
+  and they double as rate-limit bypass tokens. The OAuth authorization server on agent.yuens.me is real
+  (authorization code + PKCE, client credentials, refresh token, client_secret_post on every grant) but has
+  no registration endpoint and publishes no scopes: it exists so the owner's own claude.ai connector can
+  authenticate, not as a developer program.
+public_surface:
+  scheme: none
+  operations: [queryProfile, matchJob, getProfile, getAvailability, listProjects, listObservations]
+  mcp_endpoint: https://agent.yuens.me/public-mcp
+  verified: '2026-09-19'
+  rate_limit: 30 requests per minute per IP (rate-limits/yuens-me-rate-limits.yml)
+schemes:
+  - id: anonymous
+    type: none
+    applies_to: all public REST operations and the public MCP server
+    evidence: Every public path returned 200 without an Authorization header; the card declares securitySchemes {} and security [{}].
+  - id: ownerBearerKey
+    type: http
+    scheme: bearer
+    audience: profile owner
+    applies_to:
+      - POST /resume (tailored-resume generator; enforced when AUTH_MODE=key)
+      - site-wide rate-limit bypass
+    evidence: GET /resume and GET /profile returned 401 {"error":"Unauthorized"} with no WWW-Authenticate header on 2026-09-19.
+  - id: brainKey
+    type: apiKey
+    in: header
+    name: x-brain-key
+    audience: profile owner
+    applies_to:
+      - private MCP server https://agent.yuens.me/mcp (direct API / Claude Desktop via the mcp-remote bridge)
+      - site-wide rate-limit bypass
+    evidence: README security model; CORS allow-headers on /public-mcp and /mcp list x-brain-key.
+  - id: oauth2
+    type: oauth2
+    audience: profile owner's connector clients
+    applies_to:
+      - private MCP server https://agent.yuens.me/mcp (rate-limit bypass on /mcp only)
+    flows:
+      authorizationCode:
+        authorizationUrl: https://agent.yuens.me/authorize
+        tokenUrl: https://agent.yuens.me/token
+        pkce: S256 required
+        scopes: {}
+      clientCredentials:
+        tokenUrl: https://agent.yuens.me/token
+        scopes: {}
+      refreshToken:
+        tokenUrl: https://agent.yuens.me/token
+    token_endpoint_auth_methods: [client_secret_post]
+    response_types: [code]
+    resource: https://agent.yuens.me
+    bearer_methods: [header]
+    metadata:
+      authorization_server: well-known/yuens-me-oauth-authorization-server.json
+      protected_resource: well-known/yuens-me-oauth-protected-resource.json
+    dynamic_client_registration: false
+    scopes_published: false
+    client_onboarding: >-
+      The client id and secret are the operator's own OAUTH_CLIENT_ID / OAUTH_CLIENT_SECRET environment
+      variables; there is no registration endpoint (GET /register 404) and no developer sign-up. Third
+      parties cannot obtain an OAuth client, by design.
+    evidence: >-
+      /.well-known/oauth-authorization-server 200 (issuer, endpoints, grants, S256, client_secret_post);
+      /.well-known/oauth-protected-resource 200; GET /authorize 400 (parameter validation), GET /token 404
+      (POST-only). CHANGELOG 2026-09-16 records client_secret becoming mandatory on the authorization_code
+      and refresh_token grants.
+identity:
+  scheme: OEP Phase 1 domain verification
+  public_key: https://agent.yuens.me/.well-known/oep-public-key.json (Ed25519)
+  dns_record: _oep.yuens.me TXT "v=oep1; alg=ed25519; fp=bZCBY6x_RnGLyQgnCY0lN7CvpiBZMvRUBo68oeisPYc"
+  card_field: provider.identity.fingerprint
+  verified: '2026-09-19'
+  note: 'Proves the domain owner operates the agent; it does not authenticate callers and signs nothing yet (README: no response or card signing in Phase 1).'
+mcp_auth_summary:
+  public-mcp: none
+  mcp: oauth2 or x-brain-key
+notes:
+  - Bearer credentials are also the rate-limit bypass, so a third party must not send one it was not issued; the honest posture for agents is anonymous calls under the 30 req/min ceiling.
+  - No API-key issuance, no scopes, no OpenID Connect discovery (openid-configuration 404).

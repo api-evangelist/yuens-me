@@ -1,0 +1,24 @@
+generated: '2026-09-19'
+method: generated
+source: openapi/yuens-me-openapi.yml (6 operationIds), mcp/yuens-me-public-mcp-tools.json (ask_candidate), a2a/yuens-me-agent-card.json (5 skills), README at https://github.com/yuens1002/resume-agent
+provider_published_skills: none found (no SKILL.md, AGENTS.md or skills directory in yuens1002/resume-agent on 2026-09-19; the repo's docs/ holds engineering plans, not agent skills)
+skills:
+  - file: yuens-me-ask-candidate.md
+    name: yuens-me-ask-candidate
+    operations: [queryProfile, listProjects, listObservations]
+    mcp_tool: ask_candidate
+    a2a_skill: query
+  - file: yuens-me-score-job-fit.md
+    name: yuens-me-score-job-fit
+    operations: [getAvailability, matchJob]
+    a2a_skill: match
+  - file: yuens-me-browse-evidence.md
+    name: yuens-me-browse-evidence
+    operations: [getProfile, listProjects, listObservations]
+    a2a_skill: [info, projects]
+excluded: []
+personal_data_note: >-
+  This API publishes one real person's professional profile, deliberately, for employer AI systems — the
+  operator's stated purpose. The skills therefore package the intended use. Every example value in them is a
+  placeholder; no live response was copied into the repository, and the steps tell an agent to treat the
+  contact block as personal data.

@@ -1,0 +1,193 @@
+generated: '2026-09-19'
+method: probed
+source: https://agent.yuens.me/.well-known/agent-card.json
+card:
+  file: a2a/yuens-me-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: agent.yuens.me
+  note: >-
+    The card is served from the agent host, not the apex. yuens.me returns a real 404 for both
+    /.well-known/agent-card.json and /.well-known/agent.json; www.yuens.me answers
+    /.well-known/agent-card.json with a 302 to agent.yuens.me/.well-known/agent-card.json and answers
+    /.well-known/agent.json (and every other unknown path) with its SPA HTML shell, which is a false
+    positive and was rejected. On agent.yuens.me the legacy /.well-known/agent.json 301s to the canonical
+    path, and GET / returns the same card body. Ownership is not in question: the card's provider.organization
+    is "Sunny Yuen" with provider.url https://github.com/yuens1002, the OpenAPI at the same host declares
+    servers[] https://agent.yuens.me, the source repo (yuens1002/resume-agent) lists agent.yuens.me as its
+    homepage, and the _oep.yuens.me DNS TXT record carries the same Ed25519 fingerprint the card publishes.
+  registry_listing: >-
+    Surfaced via a2aregistry.org (harvest batch 2026-09-19). The registry's public search API returned zero
+    results for "yuens" on 2026-09-19, so the listing could not be re-confirmed from the registry side; the
+    card itself is live and is the evidence that matters.
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://agent.yuens.me/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 3581
+  body_parses_as: JSON object with AgentCard shape (name, url, version, protocolVersion, capabilities, skills, provider, defaultInputModes, defaultOutputModes)
+  cache_control: public, max-age=300
+  corroborating_probes:
+    - url: https://yuens.me/.well-known/agent-card.json
+      http_status: 404
+    - url: https://yuens.me/.well-known/agent.json
+      http_status: 404
+    - url: https://www.yuens.me/.well-known/agent-card.json
+      http_status: 302
+      note: Location https://agent.yuens.me/.well-known/agent-card.json
+    - url: https://www.yuens.me/.well-known/agent.json
+      http_status: 200
+      note: SPA HTML shell (text/html, identical 14,659-byte body served for every unknown path) — rejected as a false positive.
+    - url: https://agent.yuens.me/.well-known/agent.json
+      http_status: 301
+      note: Location https://agent.yuens.me/.well-known/agent-card.json (legacy path redirects to canonical).
+    - url: https://agent.yuens.me/
+      http_status: 200
+      note: Root serves the identical card body (documented alias).
+    - url: https://agent.yuens.me/
+      method: POST
+      http_status: 404
+      note: >-
+        A JSON-RPC 2.0 tasks/get envelope POSTed to the card's top-level url returned 404 text/plain. The
+        card declares no JSONRPC binding and no A2A protocol endpoint exists; see callable_a2a_endpoint below.
+    - url: https://agent.yuens.me/.well-known/oep-public-key.json
+      http_status: 200
+      note: Ed25519 public key whose fingerprint matches provider.identity.fingerprint in the card and the _oep.yuens.me TXT record ("v=oep1; alg=ed25519; fp=bZCBY6x_RnGLyQgnCY0lN7CvpiBZMvRUBo68oeisPYc").
+agent_card:
+  name: Sunny Yuen
+  description: >-
+    Self-sovereign AI agent representing this professional's canonical profile. Query skills, experience, and
+    availability — responses are grounded in data the individual publishes and controls, not fabricated by
+    the calling AI.
+  version: 1.3.0
+  protocol_version: '1.0'
+  url: https://agent.yuens.me
+  provider:
+    organization: Sunny Yuen
+    url: https://github.com/yuens1002
+    identity:
+      scheme: OEP Phase 1 domain verification (Ed25519 fingerprint published in DNS)
+      key_url: https://agent.yuens.me/.well-known/oep-public-key.json
+  supported_interfaces:
+    location: capabilities.extensions[0].params.supportedInterfaces (not top-level)
+    interfaces:
+      - url: https://agent.yuens.me/public-mcp
+        protocol_binding: MCP
+        protocol_version: '2025-03-26'
+      - url: https://agent.yuens.me
+        protocol_binding: HTTP+JSON
+        protocol_version: '1.0'
+  capabilities:
+    streaming: true
+    push_notifications: false
+    state_transition_history: false
+    extensions: 2
+  default_input_modes: [application/json]
+  default_output_modes: [application/json, text/plain]
+  security_schemes: {}
+  security: [{}]
+  skill_count: 5
+  skills:
+    - id: query
+      name: Query Profile
+      tags: [resume, profile, skills, experience, behavioral]
+      input_modes: [application/json, text/plain]
+      output_modes: [application/json, text/plain]
+      rest_operation: queryProfile
+      mcp_tool: ask_candidate
+    - id: match
+      name: Job Match
+      tags: [matching, job-fit, scoring]
+      input_modes: [application/json]
+      output_modes: [application/json]
+      rest_operation: matchJob
+    - id: info
+      name: Profile Info
+      tags: [profile, resume, info]
+      input_modes: []
+      output_modes: [application/json]
+      rest_operation: getProfile
+    - id: availability
+      name: Availability
+      tags: [availability, status]
+      input_modes: []
+      output_modes: [application/json]
+      rest_operation: getAvailability
+    - id: projects
+      name: Portfolio Projects
+      tags: [projects, portfolio]
+      input_modes: []
+      output_modes: [application/json]
+      rest_operation: listProjects
+  extension_api_docs:
+    rate_limits: {requests_per_minute: 30, scope: per_ip}
+    endpoints: [GET /info, GET /availability, POST /query, POST /match, GET /projects, GET /observations]
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: '1.0'
+  preferred_transport: null
+  transport: HTTP+JSON and MCP, declared via an extension-carried supportedInterfaces list; no JSONRPC binding
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  optional_fields:
+    default_input_modes: true
+    default_output_modes: true
+    preferred_transport: false
+  callable_a2a_endpoint: false
+  grade_basis: >-
+    Graded against the three A2A 1.0.0 hard checks. capabilities is an OBJECT (streaming, pushNotifications,
+    stateTransitionHistory, extensions as fields) — pass. protocolVersion "1.0" is present at the top level —
+    pass. skills is an ARRAY of five skills each carrying id, name, description, tags, inputModes and
+    outputModes — pass. Both optional discriminators (defaultInputModes, defaultOutputModes) are declared.
+    preferredTransport is absent. The structural grade is conformant; the operational caveat below is
+    recorded so the grade is not read as "an A2A client can talk to this agent".
+  deviations:
+    - field: supportedInterfaces
+      observed: carried inside capabilities.extensions[0].params, not at the top level
+      note: >-
+        A2A 1.0.0 places supportedInterfaces[] at the top level of the card. Here the top level keeps the
+        0.3-style url without a preferredTransport, and the interface list is tucked into a custom extension
+        (uri …#supported-interfaces). A 1.0 reader looking for top-level supportedInterfaces finds none and a
+        0.3 reader defaults the top-level url to JSONRPC.
+    - field: protocol endpoint
+      observed: no A2A JSON-RPC (or gRPC / HTTP+JSON message:send) endpoint is served
+      note: >-
+        The HTTP+JSON interface at https://agent.yuens.me is the bespoke REST surface described by
+        /openapi.json (POST /query, POST /match, GET /info …), not the A2A HTTP+JSON binding, and a JSON-RPC
+        envelope POSTed to the top-level url returns 404. The card is an A2A-shaped discovery document over a
+        REST + MCP agent: an A2A client can discover it but must speak REST or MCP to use it. Callable agent
+        surfaces are the OpenAPI operations and the public MCP tool ask_candidate.
+    - field: provider.organization / provider.url
+      observed: registry-schema field names
+      note: >-
+        The A2A proto uses provider.name / provider.homepage; the card uses provider.organization /
+        provider.url because a2aregistry.org's validator requires them. The source README documents this
+        choice explicitly ("Schema discrepancies").
+    - field: provider.identity
+      observed: non-standard object {fingerprint, key_url}
+      note: >-
+        An Open Employment Protocol (OEP Phase 1) extension: the Ed25519 fingerprint is corroborated by DNS
+        (_oep.yuens.me TXT) and by /.well-known/oep-public-key.json. Verified on 2026-09-19 that all three
+        values agree. Not part of A2A; harmless to a conformant reader.
+    - field: securitySchemes / security
+      observed: securitySchemes is {} and security is [{}]
+      note: >-
+        An empty security requirement object means anonymous access, which matches the live surface (every
+        public endpoint answers without credentials). The card carries no JWS signatures block, so its
+        authenticity rests on TLS plus the OEP DNS fingerprint.
+    - field: skills[].examples / inputModes
+      observed: empty arrays on the info, availability and projects skills
+      note: Those skills take no input; the empty inputModes is accurate but some readers treat an empty array as unspecified.
+surface_relationship:
+  note: >-
+    One data core, three projections. REST (6 operations at https://agent.yuens.me, anonymous, 30 req/min per
+    IP) is the widest. MCP (https://agent.yuens.me/public-mcp, one tool ask_candidate, anonymous) is the
+    narrowest and maps onto queryProfile. The A2A card lists five skills that map one-to-one onto five of the
+    six REST operations (listObservations is named in the api-docs extension but has no skill). A private
+    OAuth-protected MCP server at https://agent.yuens.me/mcp is documented for the profile owner only and is
+    not an agent surface for third parties. See mcp/yuens-me-tool-crosswalk.yml.

@@ -64,5 +64,17 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Sunny Yuen is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://yuens.me/
+Sunny Yuen is an independent full-stack engineer who operates a self-sovereign **Resume Agent** — a
+machine-queryable professional profile at `agent.yuens.me` built for employer AI systems, ATS tools and
+personal assistants. This profile catalogs that public surface:
+
+- **REST API** — six anonymous operations described by a published OpenAPI 3.1 document
+  (`openapi/`), 30 requests/minute per IP, no credentials.
+- **MCP** — a public remote server at `https://agent.yuens.me/public-mcp` exposing one tool,
+  `ask_candidate` (`mcp/`).
+- **A2A** — a conformant 1.0 agent card at `https://agent.yuens.me/.well-known/agent-card.json`
+  (`a2a/`), with the operator's identity tied to the domain by an Ed25519 fingerprint in DNS.
+- **Discovery** — `llms.txt`, robots.txt with an explicit AI-crawler allow list, RFC 8414 / RFC 9728
+  OAuth metadata for the owner's private MCP server (`well-known/`).
+
+Source: https://github.com/yuens1002/resume-agent (MIT). Website: https://yuens.me/

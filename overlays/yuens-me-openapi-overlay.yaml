@@ -1,0 +1,137 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Resume Agent API
+  version: 2026-09-19
+  description: >-
+    Non-destructive enhancements to https://agent.yuens.me/openapi.json (openapi/yuens-me-openapi.yml). Every
+    addition below is grounded in a live probe or the provider's own README on 2026-09-19: the 400 envelope
+    was observed by POSTing an empty body; the 429 ceiling is published in the agent card's api-docs
+    extension and README; tags and externalDocs point at the provider's own documentation. The original is
+    never mutated.
+extends: openapi/yuens-me-openapi.yml
+x-generated: '2026-09-19'
+x-method: generated
+actions:
+  - target: $.info
+    update:
+      contact:
+        name: Sunny Yuen (resume-agent maintainer)
+        url: https://github.com/yuens1002/resume-agent
+      license:
+        name: MIT
+        url: https://github.com/yuens1002/resume-agent/blob/main/LICENSE
+  - target: $
+    update:
+      externalDocs:
+        description: Public API endpoints, engagement rules and security model (source README)
+        url: https://github.com/yuens1002/resume-agent#public-api-endpoints
+      tags:
+        - name: Query
+          description: Natural-language questions answered from the published profile (also exposed as the MCP tool ask_candidate).
+        - name: Match
+          description: Structured job-fit scoring against a pasted job description.
+        - name: Profile
+          description: Structured, cacheable profile snapshots with no LLM call.
+        - name: Evidence
+          description: Portfolio projects and the authored observation trail behind the profile.
+  - target: $.servers[0]
+    update:
+      description: Production. Anonymous; 30 requests per minute per IP on every route except OPTIONS and /health.
+  - target: $.paths['/query'].post
+    update:
+      tags: [Query]
+      x-mcp-tool: ask_candidate
+      x-a2a-skill: query
+  - target: $.paths['/match'].post
+    update:
+      tags: [Match]
+      x-a2a-skill: match
+  - target: $.paths['/info'].get
+    update:
+      tags: [Profile]
+      x-a2a-skill: info
+  - target: $.paths['/availability'].get
+    update:
+      tags: [Profile]
+      x-a2a-skill: availability
+  - target: $.paths['/projects'].get
+    update:
+      tags: [Evidence]
+      x-a2a-skill: projects
+  - target: $.paths['/observations'].get
+    update:
+      tags: [Evidence]
+  - target: $.paths['/query'].post.requestBody.content['application/json'].schema.properties
+    update:
+      stream:
+        type: boolean
+        default: false
+        description: When true the response is chunked text/plain, not JSON (documented in the README and the GET /query self-descriptor).
+      style:
+        type: string
+        enum: [cited, conversational]
+        default: cited
+        description: cited = inline [N] markers plus a Sources block; conversational = 2-4 plain sentences with attribution only in sources[] (also selected by an x-agent-type header of human).
+  - target: $.paths['/query'].post.responses
+    update:
+      '400':
+        description: Request body failed validation (observed 2026-09-19 with an empty body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      '429':
+        description: Per-IP ceiling of 30 requests per minute exceeded (documented; response headers are not published).
+  - target: $.paths['/match'].post.responses
+    update:
+      '400':
+        description: Request body failed validation (observed 2026-09-19 with an empty body).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      '429':
+        description: Per-IP ceiling of 30 requests per minute exceeded (documented; response headers are not published).
+  - target: $.paths['/info'].get.responses
+    update:
+      '429':
+        description: Per-IP ceiling of 30 requests per minute exceeded (documented).
+  - target: $.paths['/availability'].get.responses
+    update:
+      '429':
+        description: Per-IP ceiling of 30 requests per minute exceeded (documented).
+  - target: $.paths['/projects'].get.responses
+    update:
+      '429':
+        description: Per-IP ceiling of 30 requests per minute exceeded (documented).
+  - target: $.paths['/observations'].get.responses
+    update:
+      '429':
+        description: Per-IP ceiling of 30 requests per minute exceeded (documented).
+  - target: $
+    update:
+      components:
+        schemas:
+          ValidationError:
+            type: object
+            description: Zod validation envelope as observed on 2026-09-19.
+            properties:
+              success:
+                type: boolean
+                const: false
+              error:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: ZodError
+                  issues:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code: {type: string, example: invalid_type}
+                        expected: {type: string, example: string}
+                        received: {type: string, example: undefined}
+                        path: {type: array, items: {type: string}}
+                        message: {type: string, example: Required}

@@ -1,0 +1,42 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  registry.npmjs.org search (text yuens1002, resume-agent, author:yuens1002, maintainer:yuens1002),
+  https://api.github.com/users/yuens1002/repos and https://raw.githubusercontent.com/yuens1002/resume-agent/main/package.json,
+  all 2026-09-19.
+package_count: 0
+official_sdk_count: 0
+packages: []
+summary: >-
+  No first-party client library exists for the Resume Agent API. The only published artifacts are the server
+  itself and generic integration recipes: the OpenAPI is offered for Custom GPT Actions / Gemini Gems import,
+  and the MCP endpoint for claude.ai / Claude Desktop / Cursor custom connectors — neither is a package.
+not_packages:
+  - name: yuens1002/resume-agent
+    role: server source (Hono / TypeScript, MIT)
+    registry: github
+    url: https://github.com/yuens1002/resume-agent
+    version: 0.4.129
+    published: '2026-09-19'
+    note: 'package.json is private: true — the deployable, not a client. Latest release v0.4.60 (2026-06-09); pushed 2026-09-19.'
+  - name: yuens1002/resume-agent-web
+    role: companion web UI source
+    registry: github
+    url: https://github.com/yuens1002/resume-agent-web
+    version: null
+    published: null
+    note: Human-facing front end that points at a resume-agent backend; not a client library. Pushed 2026-09-07.
+  - name: bookie-mcp
+    role: unrelated first-party npm package by the same author
+    registry: npm
+    url: https://www.npmjs.com/package/bookie-mcp
+    version: 0.8.16
+    published: null
+    note: A bookkeeping MCP server (a different product), listed only to show the author's npm presence was checked; it does not talk to agent.yuens.me.
+  - name: mcp-remote
+    role: third-party bridge named in the private-MCP Claude Desktop recipe
+    registry: npm
+    url: https://www.npmjs.com/package/mcp-remote
+    version: null
+    published: null
+    note: Generic community bridge, not first-party; not credited.

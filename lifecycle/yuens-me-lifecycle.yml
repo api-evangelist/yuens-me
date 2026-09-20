@@ -1,0 +1,43 @@
+generated: '2026-09-19'
+method: searched
+source: https://github.com/yuens1002/resume-agent (README, CHANGELOG.md, package.json, releases) cross-checked against https://agent.yuens.me/openapi.json and the agent card
+derived_from: openapi/_original/yuens-me-resume-agent-openapi.json
+versioning:
+  scheme: unversioned paths; three independent version numbers (contract, card, codebase)
+  current_version: '1.0.0'
+  spec_url: https://agent.yuens.me/openapi.json
+  base_url: https://agent.yuens.me
+  policy_published: false
+  observed_versions:
+    openapi_info_version: '1.0.0'
+    agent_card_version: '1.3.0'
+    mcp_server_version: '1.0.0'
+    package_json_version: '0.4.129'
+    latest_git_release: v0.4.60 (2026-06-09)
+  note: >-
+    Paths carry no version segment and no header-based versioning is documented. The contract says 1.0.0,
+    the card says 1.3.0, the codebase is at 0.4.129 with its last tagged release at 0.4.60 three months ago
+    while the CHANGELOG has accumulated 69 dated entries under [Unreleased] since. Nothing states which of
+    these a consumer should pin to, and no written versioning or compatibility policy exists.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    Zero of six operations carry deprecated: true and the contract declares no response headers at all.
+    The README documents additive changes with explicit back-compat reasoning (e.g. the ?authored filter
+    "leaves the default listing unchanged" and echoes itself as a capability probe), which is a working
+    compatibility habit but not a policy with a notice period.
+status_page:
+  url: null
+  health_endpoint: https://agent.yuens.me/health
+  health_status: 200
+  verified: '2026-09-19'
+  note: No status page. GET /health returns {"status":"ok"} and is documented as rate-limit-exempt for uptime monitors.
+sla:
+  published: false
+changelog:
+  url: https://github.com/yuens1002/resume-agent/blob/main/CHANGELOG.md
+  detail: changelog/yuens-me-changelog.yml

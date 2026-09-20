@@ -1,0 +1,199 @@
+generated: '2026-09-19'
+method: probed
+source: >-
+  Live GET probes of the named /.well-known/* path list (plus /apis.json and /apis.yml) on yuens.me,
+  www.yuens.me and agent.yuens.me on 2026-09-19. Every row is a request that was actually issued and every
+  status is the one returned. agent.yuens.me is the API, MCP and A2A host (OpenAPI servers[], MCP endpoint,
+  agent card and the protected-resource metadata all live there); www.yuens.me is the SPA website; yuens.me
+  301s to www.
+summary:
+  hosts_probed: 3
+  paths_probed: 45
+  documents_served: 4
+  served_on: agent.yuens.me
+  note: >-
+    Four real documents, all on the agent host: the A2A agent card (indexed in a2a/), RFC 8414
+    authorization-server metadata, RFC 9728 protected-resource metadata, and the operator's OEP Ed25519
+    public key. The apex returns real 404s for everything. www.yuens.me is a single-page app whose router
+    answers EVERY unknown path — including every /.well-known/* name and /apis.json — with the same 14,659-byte
+    HTML shell at HTTP 200; those are recorded as status 200 with document false and are misses, not hits.
+    No security.txt, openid-configuration, api-catalog, ai-plugin.json, ucp/acp/aauth or apis.json anywhere.
+  authorization_servers_followed: >-
+    The protected-resource document names https://agent.yuens.me as its own authorization server, so no
+    third host needed probing; the auth-server metadata is the row below on the same host.
+hosts:
+  - host: agent.yuens.me
+    role: API host (OpenAPI servers[]), public MCP endpoint, A2A agent card, OAuth resource + authorization server
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 200
+        content_type: application/json
+        file: ../a2a/yuens-me-agent-card.json
+        standard: A2A 1.0.0 Agent Card
+        note: Indexed and graded in a2a/yuens-me-a2a.yml. GET / serves the same body; /.well-known/agent.json 301s here.
+      - path: /.well-known/agent.json
+        status: 301
+        note: Location /.well-known/agent-card.json (legacy path redirects to canonical; not counted as a separate document).
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: application/json
+        file: yuens-me-oauth-authorization-server.json
+        standard: RFC 8414
+        note: issuer https://agent.yuens.me; grants authorization_code, client_credentials, refresh_token; PKCE S256; client_secret_post. Governs the private /mcp server only. No scopes_supported, no registration_endpoint.
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        content_type: application/json
+        file: yuens-me-oauth-protected-resource.json
+        standard: RFC 9728
+        note: resource https://agent.yuens.me, authorization_servers [https://agent.yuens.me], bearer_methods_supported [header].
+      - path: /.well-known/oep-public-key.json
+        status: 200
+        content_type: application/json
+        file: yuens-me-oep-public-key.json
+        standard: Open Employment Protocol Phase 1 (oep1) — operator-authored, not an IETF/W3C well-known
+        note: Ed25519 public key + fingerprint; fingerprint matches the _oep.yuens.me DNS TXT record and the agent card's provider.identity. Discovered from the card, not from the closed path list.
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/api-catalog.json
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/mcp.json
+        status: 404
+      - path: /.well-known/jwks.json
+        status: 404
+      - path: /.well-known/ucp.json
+        status: 404
+      - path: /.well-known/acp.json
+        status: 404
+      - path: /.well-known/aauth-resource.json
+        status: 404
+      - path: /.well-known/aauth-agent.json
+        status: 404
+      - path: /.well-known/apis.json
+        status: 404
+      - path: /apis.json
+        status: 404
+      - path: /apis.yml
+        status: 404
+  - host: yuens.me
+    role: registrable domain (301s to https://www.yuens.me/ at the root; every other path is a real 404)
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/api-catalog.json
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/mcp.json
+        status: 404
+      - path: /.well-known/ucp.json
+        status: 404
+      - path: /.well-known/acp.json
+        status: 404
+      - path: /.well-known/aauth-resource.json
+        status: 404
+      - path: /.well-known/apis.json
+        status: 404
+      - path: /.well-known/oep-public-key.json
+        status: 404
+      - path: /apis.json
+        status: 404
+      - path: /apis.yml
+        status: 404
+  - host: www.yuens.me
+    role: website (Vite SPA on Railway; the router answers every unknown path with the HTML shell at 200)
+    shell_signature: text/html; charset=UTF-8, 14,659 bytes, title "Sunny Yuen — a résumé you can talk to"; a control probe of /.well-known/does-not-exist-xyz returned the identical body
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 302
+        note: Location https://agent.yuens.me/.well-known/agent-card.json — a deliberate hand-off to the agent host, the one /.well-known path www routes explicitly.
+      - path: /.well-known/agent.json
+        status: 200
+        document: false
+        note: SPA HTML shell, not a card. Rejected.
+      - path: /.well-known/security.txt
+        status: 200
+        document: false
+        note: SPA HTML shell (text/html), not RFC 9116 text. Miss.
+      - path: /.well-known/openid-configuration
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/api-catalog
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/api-catalog.json
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/mcp.json
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/ucp.json
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/acp.json
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/aauth-resource.json
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /.well-known/apis.json
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+      - path: /apis.json
+        status: 200
+        document: false
+        note: SPA HTML shell; does not parse as JSON and carries no apis or specificationVersion. Miss.
+      - path: /apis.yml
+        status: 200
+        document: false
+        note: SPA HTML shell. Miss.
+    real_machine_files_on_this_host:
+      - path: /llms.txt
+        status: 200
+        content_type: text/plain; charset=UTF-8
+        note: Real document (3,902 bytes) — saved to llms/yuens-me-llms.txt. /llms-full.txt returns the SPA shell.
+      - path: /robots.txt
+        status: 200
+        content_type: text/plain; charset=UTF-8
+        note: Real document; allows all agents, names AI crawlers explicitly, points at /llms.txt and the sitemap.
+      - path: /sitemap.xml
+        status: 200
+        content_type: application/xml; charset=UTF-8
+        note: Real document; 11 URLs (home, /projects and nine project pages).

@@ -1,0 +1,45 @@
+# Sunny Yuen — Frontend Engineer / Full Stack Engineer / Software Engineer
+
+> Full-stack engineer with 6+ years shipping production-grade systems, increasingly at the intersection of TypeScript, AI agents, and the Model Context Protocol. Builds and operates multi-product ecosystems as sole engineer, owning specification, architecture, implementation, QA, and operations end-to-end. Designs AI-augmented systems that are deterministic and auditable by construction: engineering judgment owns what to build and why; AI accelerates the mechanical work.
+
+This is a live, queryable résumé. The data is machine-readable and the candidate's agent
+can be queried over HTTP, MCP, or A2A.
+
+## Query endpoints (agent.yuens.me)
+- Profile (JSON): https://agent.yuens.me/info
+- Ask a question (HTTP): POST https://agent.yuens.me/query  body { "question": "..." }
+- Ask a question (MCP): https://agent.yuens.me/public-mcp  (tool: ask_candidate)
+- Job-fit score (HTTP): POST https://agent.yuens.me/match  body { "job_description": "..." }
+- A2A agent card: https://agent.yuens.me/.well-known/agent-card.json
+- OpenAPI (Custom GPT Actions): https://agent.yuens.me/openapi.json
+
+## Skills
+- **Languages:** TypeScript, JavaScript, Python, Go, HTML
+- **Frameworks & Libraries:** Next.js, React, Hono, Node.js, Tailwind CSS, shadcn/ui
+- **AI & Agents:** Anthropic Claude API, Vercel AI SDK, MCP (@modelcontextprotocol/sdk), Claude Agent SDK, OpenRouter
+- **Data & Infrastructure:** Supabase, PostgreSQL, pgvector, Prisma, Neon PostgreSQL, Railway, Vercel, GitHub Actions, Zod
+- **Testing:** Jest, Playwright, Vitest, RTL, Cucumber
+
+## Experience
+- **Self-Employed** — Product Engineer (2023–now)
+- **Wipro, Inc** — Frontend Developer (2023)
+- **DesignIt, Inc** — Software Developer (2022)
+- **MetroStar Systems** — Frontend Developer (2020–2022)
+- **Remine, Inc** — Software Engineer (2019–2020)
+- **DealerOn, Inc** — Front End Developer (2017–2019)
+
+## Projects
+- [Artisan Roast Store](https://demo.artisanroast.app): Open-source e-commerce store for specialty coffee retailers, built with an AI-native development workflow.
+- [Artisan Roast SaaS Platform](https://artisanroast.app): Operator control plane for the Artisan Roast stack — manages app installs, subscription plans, billing, license enforcement, and provisioning automation across all tenant shop instances.
+- [Resume Agent](https://agent.yuens.me): A2A-compatible AI agent that represents a professional profile as a machine-queryable JSON API — built for employer AI systems, ATS tools, and personal LLM interfaces.
+- [Brew Guide](https://brew-guide-production.up.railway.app): Community-powered MCP server that answers 'how should I brew this coffee?' — synthesizes consensus brew parameters from logged experiments with zero LLM dependency.
+- [Resume Agent Web](https://www.yuens.me): A talkable, machine-readable face for any resume-agent backend — conversational UI for people, JSON-LD + llms.txt for AI.
+- [Open Employment Protocol (OEP)](https://github.com/yuens1002/open-employment-protocol): An open, federated protocol for hiring — a reconciler that poses the candidate and employer positions and settles a net outcome no single party owns.
+- [Bookie](https://railway.com/deploy/X2T0sN?referralCode=X2mmSS): MCP server for personal & business double-entry bookkeeping — no UI, the LLM is the interface
+- [StayOps](https://stayops-nine.vercel.app): Chat-first property-operations app for short-term-rental owners, where the agent is the only way state changes.
+- [OpenClaw Control Plane](https://github.com/yuens1002/openclaw-control-plane): A governed, auditable provisioning shell for AI agent runtimes on Railway, separating reusable operating discipline from client-specific automation.
+
+## Contact
+- GitHub: https://github.com/yuens1002
+- LinkedIn: https://linkedin.com/in/yuens-me
+- Email: sunny@yuens.me

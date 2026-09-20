@@ -1,0 +1,71 @@
+generated: '2026-09-19'
+method: derived
+source: >-
+  mcp/yuens-me-public-mcp-tools.json (live tools/list, 2026-09-19) and a2a/yuens-me-agent-card.json (live
+  card) bound to the operationIds in openapi/yuens-me-openapi.yml (live https://agent.yuens.me/openapi.json).
+surfaces:
+  openapi:
+    file: openapi/yuens-me-openapi.yml
+    url: https://agent.yuens.me/openapi.json
+    operations: 6
+    gated: false
+  mcp:
+    url: https://agent.yuens.me/public-mcp
+    tools: 1
+    gated: false
+    note: tools/list answered anonymously; the inputSchema is real, not inferred.
+  a2a:
+    url: https://agent.yuens.me/.well-known/agent-card.json
+    skills: 5
+    gated: false
+    note: Discovery card only — no A2A JSON-RPC endpoint; skills resolve to REST operations.
+  graphql: null
+crosswalk:
+  - tool: ask_candidate
+    category: profile-query
+    rest: [queryProfile]
+    binding: POST /query
+    confidence: high
+    note: >-
+      Same question/context/stream argument set; the REST body additionally accepts style ("cited" |
+      "conversational") which the tool does not expose. Both return an answer with confidence, sources and
+      project_slugs; the tool streams via MCP progress notifications where REST streams text/plain.
+a2a_skills:
+  - skill: query
+    rest: [queryProfile]
+    mcp: ask_candidate
+    confidence: high
+  - skill: match
+    rest: [matchJob]
+    confidence: high
+  - skill: info
+    rest: [getProfile]
+    confidence: high
+  - skill: availability
+    rest: [getAvailability]
+    confidence: high
+  - skill: projects
+    rest: [listProjects]
+    confidence: high
+mcp_only: []
+rest_only:
+  - operation: matchJob
+    reason: Job-fit scoring is HTTP-only by design; the README states all structured endpoints stay HTTP "for clients that prefer raw JSON".
+  - operation: getProfile
+    reason: Structured snapshot, no NL processing; served as JSON only.
+  - operation: getAvailability
+    reason: Structured snapshot; served as JSON only.
+  - operation: listProjects
+    reason: Structured list; served as JSON only (ask_candidate can page projects via shown_projects context).
+  - operation: listObservations
+    reason: Browsable evidence trail with stable per-item URLs; not exposed as a tool or an A2A skill (it is named only in the card's api-docs extension).
+coverage:
+  mcp_tools: 1
+  mcp_tools_mapped: 1
+  a2a_skills: 5
+  a2a_skills_mapped: 5
+  rest_operations: 6
+  rest_operations_with_tool: 1
+  rest_operations_with_skill: 5
+  rest_only: 5
+  mcp_only: 0

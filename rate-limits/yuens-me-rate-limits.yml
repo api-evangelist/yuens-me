@@ -1,0 +1,30 @@
+generated: '2026-09-19'
+method: searched
+source: https://agent.yuens.me/.well-known/agent-card.json (capabilities.extensions[1].params.rate_limits) and https://github.com/yuens1002/resume-agent#security-model
+docs: https://github.com/yuens1002/resume-agent#security-model
+limit_count: 1
+summary: >-
+  One flat per-IP ceiling of 30 requests per minute across the whole host, published in the agent card and
+  the README. No rate-limit response headers are documented, and none were observed on 200 responses.
+rate_limits:
+  - name: Per-IP request ceiling
+    scope: per-ip
+    limit: 30
+    window: 60s
+    metric: request
+    burst: null
+    applies_to: Every route except OPTIONS preflights and GET /health (documented as exempt for uptime monitors)
+    shared_bucket: POST /query and /public-mcp draw from the same bucket
+    bypass: >-
+      Documented: a valid Authorization Bearer API key or a valid x-brain-key header bypasses the limit
+      site-wide; a valid OAuth access token bypasses it on /mcp only. These credentials belong to the profile
+      owner, not to third parties.
+    domains: [agent.yuens.me]
+    status_on_exhaustion: 429
+    headers:
+      documented: []
+      observed_on_200: 'none rate-related (responses carry only access-control-allow-origin, cache-control, content-type, server, x-railway-request-id)'
+    verified: '2026-09-19'
+notes:
+  - 'The card publishes the number as {requests_per_minute: 30, scope: per_ip} inside a custom extension, so an agent reading the card learns the ceiling before its first call.'
+  - The ceiling was not exercised in this pass; the 429 body shape and any Retry-After header remain unpublished.

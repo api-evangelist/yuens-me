@@ -1,0 +1,63 @@
+generated: '2026-09-19'
+method: derived
+source: >-
+  Live unauthenticated probes of https://agent.yuens.me on 2026-09-19 (POST /query and POST /match with an
+  empty JSON body; GET /resume and GET /profile; GET /token, /mcp and unknown paths) plus the source README's
+  security-model section. The published OpenAPI declares only 200 responses, so every entry here comes from
+  observed behaviour or documented policy, not from the contract.
+format: custom
+rfc9457: false
+envelope:
+  validation: '{ "success": false, "error": { "issues": [ { code, expected, received, path[], message } ], "name": "ZodError" } }'
+  auth: '{ "error": "Unauthorized" }'
+  not_found: text/plain "404 Not Found" (Hono default; not JSON)
+problem_types:
+  - status: 400
+    id: validation-error
+    title: Request body failed schema validation
+    media_type: application/json
+    observed: true
+    detail: >-
+      Zod issues array names the offending path (e.g. ["question"] or ["job_description"]) and the expected
+      type. Observed 2026-09-19 by POSTing {} to /query and /match.
+    remediation: Send the required string field named in issues[].path; question on /query, job_description on /match.
+  - status: 401
+    id: unauthorized
+    title: Credential required on a private route
+    media_type: application/json
+    observed: true
+    detail: >-
+      GET /resume and GET /profile returned {"error":"Unauthorized"} without a WWW-Authenticate header. /resume
+      is the owner's tailored-resume generator (Bearer API key when AUTH_MODE=key). None of the six public
+      operations require credentials.
+    remediation: These routes are for the profile owner; third parties should use the six public operations instead.
+  - status: 404
+    id: not-found
+    title: Unknown path, private/unknown observation id, or unsupported method on the root
+    media_type: text/plain
+    observed: true
+    detail: >-
+      Unknown paths (including /token, /mcp on anonymous GET, and a JSON-RPC POST to /) return the Hono
+      default "404 Not Found" text body. The README states a private or unknown observation id returns 404,
+      never 403, so the surface never confirms a private note exists.
+  - status: 405
+    id: sse-stream-not-offered
+    title: GET on /public-mcp with Accept text/event-stream
+    media_type: application/json
+    observed: false
+    detail: >-
+      Documented: the stateless MCP server offers no server-to-client SSE stream and answers such a GET with
+      405 plus Allow POST, with the self-descriptor still in the body. Not exercised in this pass.
+  - status: 429
+    id: rate-limited
+    title: Per-IP ceiling exceeded
+    media_type: unknown
+    observed: false
+    detail: >-
+      30 requests per minute per IP on every route except OPTIONS and /health, shared between POST /query and
+      /public-mcp (agent card api-docs extension; README security model). Neither the body shape nor any
+      Retry-After / RateLimit-* header is published, and the ceiling was not exercised in this pass.
+    remediation: Back off for the remainder of the minute; do not send a bearer credential you were not issued.
+notes:
+  - The contract declares no 4xx/5xx at all; overlays/yuens-me-openapi-overlay.yaml adds the observed 400 and the documented 429.
+  - GET on POST-only endpoints returns 200 with a self-descriptor rather than 405 (documented, deliberate).

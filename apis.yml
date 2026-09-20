@@ -1,23 +1,129 @@
 aid: yuens-me
 name: Sunny Yuen
-description: 'Sunny Yuen is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Sunny Yuen is an independent full-stack engineer who operates a self-sovereign "Resume Agent": a
+  machine-queryable professional profile served from agent.yuens.me for employer AI systems, ATS tools and
+  personal assistants. The surface is an anonymous six-operation REST API described by a published OpenAPI
+  3.1 document, a public remote MCP server exposing an ask_candidate tool, and an A2A 1.0 agent card, with
+  the agent's identity tied to the yuens.me domain through an Ed25519 fingerprint published in DNS (Open
+  Employment Protocol Phase 1). The software is MIT-licensed and published as a fork-ready reference
+  implementation.
 url: https://raw.githubusercontent.com/api-evangelist/yuens-me/refs/heads/main/apis.yml
+image: https://www.yuens.me/og-default.jpg
 x-type: company
+x-entity: individual
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: enriched
+x-tier-reason: harvest stub profiled by the local enrichment pass on 2026-09-19
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
 - Company
-apis: []
+- AI Agents
+- A2A
+- MCP
+- Resume
+- Hiring
+- Recruiting
+- Professional Profile
+- Job Matching
+- Open Source
+apis:
+- name: Resume Agent API
+  description: >-
+    Anonymous JSON API over one candidate's published professional profile: ask a natural-language question
+    (queryProfile), score the candidate against a job description (matchJob), and read the structured
+    profile, availability, portfolio projects and the authored observation trail behind them. Rate-limited
+    to 30 requests per minute per IP; also reachable as the MCP tool ask_candidate and discoverable through
+    an A2A agent card.
+  image: https://www.yuens.me/og-default.jpg
+  humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  baseURL: https://agent.yuens.me
+  tags:
+  - Resume
+  - Hiring
+  - Job Matching
+  - Profile
+  - AI Agents
+  - MCP
+  - A2A
+  properties:
+  - type: OpenAPI
+    url: openapi/yuens-me-openapi.yml
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://agent.yuens.me/openapi.json
+  - type: Documentation
+    url: https://github.com/yuens1002/resume-agent#readme
+  - type: APIReference
+    url: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  - type: GettingStarted
+    url: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
+  - type: SourceCode
+    url: https://github.com/yuens1002/resume-agent
+  - type: MCPServer
+    url: mcp/yuens-me-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/yuens-me-tool-crosswalk.yml
+  - type: Overlay
+    url: overlays/yuens-me-openapi-overlay.yaml
+  - type: Authentication
+    url: authentication/yuens-me-authentication.yml
+  - type: Conventions
+    url: conventions/yuens-me-conventions.yml
+  - type: ErrorCatalog
+    url: errors/yuens-me-problem-types.yml
+  - type: DataModel
+    url: data-model/yuens-me-data-model.yml
+  - type: RateLimits
+    url: rate-limits/yuens-me-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/yuens-me-lifecycle.yml
+  - type: Conformance
+    url: conformance/yuens-me-conformance.yml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/yuens-me-domain-security.yml
 - type: Website
   url: https://yuens.me/
+- type: GitHub
+  url: https://github.com/yuens1002
+- type: Support
+  url: https://github.com/yuens1002/resume-agent/issues
+- type: License
+  url: https://github.com/yuens1002/resume-agent/blob/main/LICENSE
+- type: Sitemap
+  url: https://www.yuens.me/sitemap.xml
+- type: LLMsTxt
+  url: llms/yuens-me-llms.txt
+- type: LLMsTxt
+  name: llms.txt (provider-hosted)
+  url: https://www.yuens.me/llms.txt
+- type: AgentCard
+  url: a2a/yuens-me-a2a.yml
+- type: WellKnown
+  url: well-known/yuens-me-well-known.yml
+- type: Packages
+  url: packages/yuens-me-packages.yml
+- type: Plans
+  url: plans/yuens-me-plans-pricing.yml
+- type: ChangeLog
+  url: changelog/yuens-me-changelog.yml
+- type: ChangeLog
+  name: CHANGELOG.md (provider-hosted)
+  url: https://github.com/yuens1002/resume-agent/blob/main/CHANGELOG.md
+- type: RegulatoryPosture
+  url: regulatory/yuens-me-regulatory-posture.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 29
+  pass: local-v3

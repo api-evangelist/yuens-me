@@ -1,0 +1,38 @@
+{
+  "result": {
+    "tools": [
+      {
+        "name": "ask_candidate",
+        "title": "Ask the Candidate",
+        "description": "Ask a natural-language question about this candidate's skills, experience, or background. Responses are grounded in the candidate's canonical published profile — not inferred by the calling AI. Use this when a recruiter, hiring manager, or screening tool needs answers about the candidate.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "description": "Natural-language question about the candidate"
+            },
+            "context": {
+              "type": "string",
+              "description": "Optional caller context: \"ATS\", \"recruiter\", \"ai-agent\", etc. Adjusts tone. To follow up on a prior response and see remaining projects, append \"; shown_projects: slug1, slug2\" using the project_slugs from the previous response — the answer will cover only projects not already shown."
+            },
+            "stream": {
+              "type": "boolean",
+              "description": "If true, the response streams progressively via MCP progress notifications."
+            }
+          },
+          "required": [
+            "question"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        }
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 2
+}

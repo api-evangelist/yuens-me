@@ -1,0 +1,59 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: >-
+  Artifacts harvested this run (well-known/, security/, lifecycle/, conformance/), live probes of the
+  conventional legal/accessibility/privacy paths on www.yuens.me, the www sitemap, and the docs in
+  https://github.com/yuens1002/resume-agent (README, CHANGELOG.md, docs/privacy-surface-audit.md), 2026-09-19.
+signals: {}
+checked:
+  - signal: sbom
+    result: absent
+    evidence: No SBOM, CycloneDX or SPDX file in the repo tree (208 files) or on either host; /security/sbom on www returns the SPA shell.
+  - signal: support_lifetime
+    result: absent
+    evidence: No versioning or support-period statement; see lifecycle/yuens-me-lifecycle.yml (policy_published false).
+  - signal: accessibility_conformance
+    result: absent
+    evidence: https://www.yuens.me/accessibility returned 200 but the body is the SPA HTML shell (control probe identical); no VPAT or WCAG conformance report anywhere. The operator's employment bullets mention 508/WCAG work for clients, which is a résumé claim, not a conformance report for this product.
+  - signal: training_data_summary
+    result: absent
+    evidence: No page. The README states answers are grounded in the operator's own published profile and OB1 notes and that no personal data lives in the repo, but publishes no training-data summary.
+  - signal: ai_transparency
+    result: absent
+    evidence: >-
+      The README and docs/query-engagement-rules.md disclose that /query and /match are LLM-generated (Haiku /
+      Sonnet via OpenRouter), that every claim is cited, and each JSON answer carries meta.model. That is
+      developer documentation, not an AI-transparency page or disclosure a user of the service is pointed to;
+      /ai/transparency and /transparency on www return the SPA shell. Recorded as absent under the
+      substance-not-word rule.
+  - signal: global_privacy_control
+    result: absent
+    evidence: No privacy policy exists on either host (www /privacy returns the SPA shell); no GPC statement. Not header-probed by design.
+  - signal: data_subject_request
+    result: absent
+    evidence: /privacy/requests on www returns the SPA shell; no DSAR page or endpoint. Note the data subject here is the operator himself; the service stores query telemetry about callers (summarize_observed_queries) with no published retention or request path.
+  - signal: subprocessors
+    result: absent
+    evidence: /legal/subprocessors returns the SPA shell. The README's Stack table names Supabase, OpenRouter (Anthropic models), Railway and Vercel as infrastructure, which is an architecture disclosure, not a dated subprocessor table.
+  - signal: data_residency
+    result: absent
+    evidence: No data-residency documentation; deployment region is not stated (Railway edge answered from jfk1).
+  - signal: incident_notification
+    result: absent
+    evidence: No DPA (/legal/dpa returns the SPA shell) and no security.txt; no incident SLA stated.
+  - signal: age_assurance
+    result: absent
+    evidence: Not applicable to the surface and nothing published.
+  - signal: notice_and_action
+    result: absent
+    evidence: /legal/report-content not present (SPA shell); the only reporting path is GitHub issues on the source repo.
+  - signal: transparency_report
+    result: absent
+    evidence: /transparency returns the SPA shell; none published.
+  - signal: exit_assistance
+    result: absent
+    evidence: Not applicable — no customer data is held for third parties; the code is MIT and the README documents forking/self-hosting, which is a portability posture for the operator, not exit assistance for a customer.
+note: >-
+  An empty signals map is the expected result: this is a single individual's self-hosted agent, not a
+  company with a legal surface. Which regimes reach it is not decided here.
