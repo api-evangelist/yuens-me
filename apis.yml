@@ -28,6 +28,17 @@ tags:
 - Recruiting
 - Professional Profile
 - Job Matching
+- Open-Source
+tags_raw:
+- Company
+- AI Agents
+- A2A
+- MCP
+- Resume
+- Hiring
+- Recruiting
+- Professional Profile
+- Job Matching
 - Open Source
 apis:
 - name: Resume Agent API
@@ -41,6 +52,14 @@ apis:
   humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
   baseURL: https://agent.yuens.me
   tags:
+  - Resume
+  - Hiring
+  - Job Matching
+  - Profiles
+  - AI Agents
+  - MCP
+  - A2A
+  tags_raw:
   - Resume
   - Hiring
   - Job Matching
