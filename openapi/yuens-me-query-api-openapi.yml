@@ -1,0 +1,93 @@
+openapi: 3.2.0
+info:
+  title: Yuens Me Query API
+  version: 1.0.0
+  description: 'Operations tagged Query across 2 of this provider''s published API definitions: yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://agent.yuens.me
+tags:
+- name: Query
+paths:
+  /query:
+    post:
+      operationId: queryProfile
+      summary: Ask a question about the candidate
+      description: Ask any natural language question about the candidate's skills, experience, projects, background, or behavioral tendencies. Use this for conversational questions like "What is your TypeScript experience?" or "How do you approach testing?"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - question
+              properties:
+                question:
+                  type: string
+                  description: The question to ask about the candidate
+                context:
+                  type: string
+                  description: Optional extra context (e.g. role being hired for)
+      responses:
+        '200':
+          description: Answer grounded in the candidate's profile data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                  confidence:
+                    type: string
+                    enum:
+                    - high
+                    - medium
+                    - low
+                  sources:
+                    type: array
+                    items:
+                      type: string
+                  project_slugs:
+                    type: array
+                    items:
+                      type: string
+                  publications:
+                    type: array
+                    description: Published pieces this answer cites, resolved server-side from the profile record — follow canonical_url to read the piece. Empty when the answer cites none.
+                    items:
+                      type: object
+                      properties:
+                        slug:
+                          type: string
+                        title:
+                          type: string
+                        platform:
+                          type: string
+                        canonical_url:
+                          type: string
+                        date:
+                          type: string
+                  follow_up_suggestions:
+                    type: array
+                    items:
+                      type: string
+                  action_intent:
+                    type: object
+                    nullable: true
+                    description: Set when the question requested the job-match/résumé-tailoring action rather than a narrated answer. Null otherwise.
+                    properties:
+                      tool:
+                        type: string
+                    required:
+                    - tool
+                  fit_question:
+                    type: boolean
+                    description: True when the question asked about the candidate's fit/suitability for a role and was answered in prose (narrate-first). Clients with an interactive fit-check flow should offer it as an explicit follow-up when this is true.
+      tags:
+      - Query
+    servers:
+    - url: https://agent.yuens.me
+x-refined-from:
+- yuens-me-resume-agent-openapi.json
+- yuens-me-openapi.yml

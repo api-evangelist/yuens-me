@@ -1,3 +1,5 @@
+# x-archived-from: yuens-me-openapi.yml
+# x-archived-on: 2026-09-26
 # Faithful YAML rendering of https://agent.yuens.me/openapi.json fetched 2026-09-19 (HTTP 200, application/json).
 # Content is unchanged from openapi/_original/yuens-me-resume-agent-openapi.json; only the serialization differs.
 openapi: 3.1.0

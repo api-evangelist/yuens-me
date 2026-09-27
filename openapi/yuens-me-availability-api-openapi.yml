@@ -1,0 +1,44 @@
+openapi: 3.2.0
+info:
+  title: Yuens Me Availability API
+  version: 1.0.0
+  description: 'Operations tagged Availability across 2 of this provider''s published API definitions: yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://agent.yuens.me
+tags:
+- name: Availability
+paths:
+  /availability:
+    get:
+      operationId: getAvailability
+      summary: Get current availability and preferred roles
+      description: Returns whether the candidate is currently seeking work, their availability status, and preferred roles and locations. Use when asked "Are you open to work?" or "What roles are you looking for?"
+      responses:
+        '200':
+          description: Availability status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  seeking:
+                    type: boolean
+                  status:
+                    type: string
+                    enum:
+                    - open
+                    - actively-looking
+                    - not-looking
+                  preferred_roles:
+                    type: array
+                    items:
+                      type: string
+                  remote:
+                    type: boolean
+      tags:
+      - Availability
+    servers:
+    - url: https://agent.yuens.me
+x-refined-from:
+- yuens-me-resume-agent-openapi.json
+- yuens-me-openapi.yml

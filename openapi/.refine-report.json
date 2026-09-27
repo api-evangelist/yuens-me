@@ -1,0 +1,57 @@
+{
+  "provider": "yuens-me",
+  "sources": [
+    "_original/yuens-me-resume-agent-openapi.json",
+    "yuens-me-openapi.yml"
+  ],
+  "outputs": [
+    "yuens-me-availability-api-openapi.yml",
+    "yuens-me-info-api-openapi.yml",
+    "yuens-me-match-api-openapi.yml",
+    "yuens-me-observations-api-openapi.yml",
+    "yuens-me-projects-api-openapi.yml",
+    "yuens-me-query-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/yuens-me-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "yuens-me-resume-agent-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "yuens-me-resume-agent-openapi.json: tagged paths POST /query -> Query",
+    "yuens-me-resume-agent-openapi.json: tagged paths POST /match -> Match",
+    "yuens-me-resume-agent-openapi.json: tagged paths GET /info -> Info",
+    "yuens-me-resume-agent-openapi.json: tagged paths GET /availability -> Availability",
+    "yuens-me-resume-agent-openapi.json: tagged paths GET /projects -> Projects",
+    "yuens-me-resume-agent-openapi.json: tagged paths GET /observations -> Observations",
+    "yuens-me-resume-agent-openapi.json: declared missing tag: Availability",
+    "yuens-me-resume-agent-openapi.json: declared missing tag: Info",
+    "yuens-me-resume-agent-openapi.json: declared missing tag: Match",
+    "yuens-me-resume-agent-openapi.json: declared missing tag: Observations",
+    "yuens-me-resume-agent-openapi.json: declared missing tag: Projects",
+    "yuens-me-resume-agent-openapi.json: declared missing tag: Query",
+    "yuens-me-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "yuens-me-openapi.yml: tagged paths POST /query -> Query",
+    "yuens-me-openapi.yml: tagged paths POST /match -> Match",
+    "yuens-me-openapi.yml: tagged paths GET /info -> Info",
+    "yuens-me-openapi.yml: tagged paths GET /availability -> Availability",
+    "yuens-me-openapi.yml: tagged paths GET /projects -> Projects",
+    "yuens-me-openapi.yml: tagged paths GET /observations -> Observations",
+    "yuens-me-openapi.yml: declared missing tag: Availability",
+    "yuens-me-openapi.yml: declared missing tag: Info",
+    "yuens-me-openapi.yml: declared missing tag: Match",
+    "yuens-me-openapi.yml: declared missing tag: Observations",
+    "yuens-me-openapi.yml: declared missing tag: Projects",
+    "yuens-me-openapi.yml: declared missing tag: Query",
+    "tag 'Availability' spans 2 source specs (yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml): per-path servers applied",
+    "tag 'Info' spans 2 source specs (yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml): per-path servers applied",
+    "tag 'Match' spans 2 source specs (yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml): per-path servers applied",
+    "tag 'Observations' spans 2 source specs (yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml): per-path servers applied",
+    "tag 'Projects' spans 2 source specs (yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml): per-path servers applied",
+    "tag 'Query' spans 2 source specs (yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml): per-path servers applied",
+    "apis.yml register: written (+6 apis, 6 total)"
+  ],
+  "skipped": []
+}

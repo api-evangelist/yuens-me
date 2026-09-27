@@ -1,0 +1,51 @@
+openapi: 3.2.0
+info:
+  title: Yuens Me Info API
+  version: 1.0.0
+  description: 'Operations tagged Info across 2 of this provider''s published API definitions: yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://agent.yuens.me
+tags:
+- name: Info
+paths:
+  /info:
+    get:
+      operationId: getProfile
+      summary: Get the full candidate profile
+      description: Returns the complete structured profile including contact info, summary, all skills, full employment history, education, and all portfolio projects. Use when you need comprehensive profile data.
+      responses:
+        '200':
+          description: Full public profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contact:
+                    type: object
+                  summary:
+                    type: string
+                  tagline:
+                    type: string
+                    nullable: true
+                    description: Short identity tagline shown under the candidate's name. Null for existing profiles — frontend falls back to preferred_roles when absent.
+                  skills:
+                    type: array
+                  employment:
+                    type: array
+                  education:
+                    type: array
+                  projects:
+                    type: array
+                  publications:
+                    type: array
+                    description: Published pieces (blog posts, X threads, YouTube scripts) cited as evidence alongside portfolio projects.
+                  availability:
+                    type: object
+      tags:
+      - Info
+    servers:
+    - url: https://agent.yuens.me
+x-refined-from:
+- yuens-me-resume-agent-openapi.json
+- yuens-me-openapi.yml

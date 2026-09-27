@@ -9,6 +9,22 @@ description: >-
   Employment Protocol Phase 1). The software is MIT-licensed and published as a fork-ready reference
   implementation.
 url: https://raw.githubusercontent.com/api-evangelist/yuens-me/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  license_evidence:
+    not_product:
+    - yuens1002/resume-agent
+  open_source: unknown
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 image: https://www.yuens.me/og-default.jpg
 x-type: company
 x-entity: individual
@@ -28,7 +44,7 @@ tags:
 - Recruiting
 - Professional Profile
 - Job Matching
-- Open-Source
+- Open Source
 tags_raw:
 - Company
 - AI Agents
@@ -40,39 +56,18 @@ tags_raw:
 - Professional Profile
 - Job Matching
 - Open Source
+- Open-Source
 apis:
-- name: Resume Agent API
-  description: >-
-    Anonymous JSON API over one candidate's published professional profile: ask a natural-language question
-    (queryProfile), score the candidate against a job description (matchJob), and read the structured
-    profile, availability, portfolio projects and the authored observation trail behind them. Rate-limited
-    to 30 requests per minute per IP; also reachable as the MCP tool ask_candidate and discoverable through
-    an A2A agent card.
-  image: https://www.yuens.me/og-default.jpg
+- aid: yuens-me:yuens-me-availability-api
+  name: Sunny Yuen Availability API
+  description: The Availability API from Sunny Yuen — 1 operation(s) for availability.
   humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
   baseURL: https://agent.yuens.me
   tags:
-  - Resume
-  - Hiring
-  - Job Matching
-  - Profiles
-  - AI Agents
-  - MCP
-  - A2A
-  tags_raw:
-  - Resume
-  - Hiring
-  - Job Matching
-  - Profile
-  - AI Agents
-  - MCP
-  - A2A
+  - Availability
   properties:
   - type: OpenAPI
-    url: openapi/yuens-me-openapi.yml
-  - type: OpenAPI
-    name: OpenAPI (provider-hosted)
-    url: https://agent.yuens.me/openapi.json
+    url: openapi/yuens-me-availability-api-openapi.yml
   - type: Documentation
     url: https://github.com/yuens1002/resume-agent#readme
   - type: APIReference
@@ -81,12 +76,8 @@ apis:
     url: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
   - type: SourceCode
     url: https://github.com/yuens1002/resume-agent
-  - type: MCPServer
-    url: mcp/yuens-me-mcp.yml
   - type: ToolCrosswalk
     url: mcp/yuens-me-tool-crosswalk.yml
-  - type: Overlay
-    url: overlays/yuens-me-openapi-overlay.yaml
   - type: Authentication
     url: authentication/yuens-me-authentication.yml
   - type: Conventions
@@ -101,14 +92,188 @@ apis:
     url: lifecycle/yuens-me-lifecycle.yml
   - type: Conformance
     url: conformance/yuens-me-conformance.yml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: yuens-me:yuens-me-info-api
+  name: Sunny Yuen Info API
+  description: The Info API from Sunny Yuen — 1 operation(s) for info.
+  humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  baseURL: https://agent.yuens.me
+  tags:
+  - Info
+  properties:
+  - type: OpenAPI
+    url: openapi/yuens-me-info-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/yuens1002/resume-agent#readme
+  - type: APIReference
+    url: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  - type: GettingStarted
+    url: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
+  - type: SourceCode
+    url: https://github.com/yuens1002/resume-agent
+  - type: ToolCrosswalk
+    url: mcp/yuens-me-tool-crosswalk.yml
+  - type: Authentication
+    url: authentication/yuens-me-authentication.yml
+  - type: Conventions
+    url: conventions/yuens-me-conventions.yml
+  - type: ErrorCatalog
+    url: errors/yuens-me-problem-types.yml
+  - type: DataModel
+    url: data-model/yuens-me-data-model.yml
+  - type: RateLimits
+    url: rate-limits/yuens-me-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/yuens-me-lifecycle.yml
+  - type: Conformance
+    url: conformance/yuens-me-conformance.yml
+- aid: yuens-me:yuens-me-match-api
+  name: Sunny Yuen Match API
+  description: The Match API from Sunny Yuen — 1 operation(s) for match.
+  humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  baseURL: https://agent.yuens.me
+  tags:
+  - Match
+  properties:
+  - type: OpenAPI
+    url: openapi/yuens-me-match-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/yuens1002/resume-agent#readme
+  - type: APIReference
+    url: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  - type: GettingStarted
+    url: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
+  - type: SourceCode
+    url: https://github.com/yuens1002/resume-agent
+  - type: ToolCrosswalk
+    url: mcp/yuens-me-tool-crosswalk.yml
+  - type: Authentication
+    url: authentication/yuens-me-authentication.yml
+  - type: Conventions
+    url: conventions/yuens-me-conventions.yml
+  - type: ErrorCatalog
+    url: errors/yuens-me-problem-types.yml
+  - type: DataModel
+    url: data-model/yuens-me-data-model.yml
+  - type: RateLimits
+    url: rate-limits/yuens-me-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/yuens-me-lifecycle.yml
+  - type: Conformance
+    url: conformance/yuens-me-conformance.yml
+- aid: yuens-me:yuens-me-observations-api
+  name: Sunny Yuen Observations API
+  description: The Observations API from Sunny Yuen — 1 operation(s) for observations.
+  humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  baseURL: https://agent.yuens.me
+  tags:
+  - Observations
+  properties:
+  - type: OpenAPI
+    url: openapi/yuens-me-observations-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/yuens1002/resume-agent#readme
+  - type: APIReference
+    url: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  - type: GettingStarted
+    url: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
+  - type: SourceCode
+    url: https://github.com/yuens1002/resume-agent
+  - type: ToolCrosswalk
+    url: mcp/yuens-me-tool-crosswalk.yml
+  - type: Authentication
+    url: authentication/yuens-me-authentication.yml
+  - type: Conventions
+    url: conventions/yuens-me-conventions.yml
+  - type: ErrorCatalog
+    url: errors/yuens-me-problem-types.yml
+  - type: DataModel
+    url: data-model/yuens-me-data-model.yml
+  - type: RateLimits
+    url: rate-limits/yuens-me-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/yuens-me-lifecycle.yml
+  - type: Conformance
+    url: conformance/yuens-me-conformance.yml
+- aid: yuens-me:yuens-me-projects-api
+  name: Sunny Yuen Projects API
+  description: The Projects API from Sunny Yuen — 1 operation(s) for projects.
+  humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  baseURL: https://agent.yuens.me
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/yuens-me-projects-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/yuens1002/resume-agent#readme
+  - type: APIReference
+    url: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  - type: GettingStarted
+    url: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
+  - type: SourceCode
+    url: https://github.com/yuens1002/resume-agent
+  - type: ToolCrosswalk
+    url: mcp/yuens-me-tool-crosswalk.yml
+  - type: Authentication
+    url: authentication/yuens-me-authentication.yml
+  - type: Conventions
+    url: conventions/yuens-me-conventions.yml
+  - type: ErrorCatalog
+    url: errors/yuens-me-problem-types.yml
+  - type: DataModel
+    url: data-model/yuens-me-data-model.yml
+  - type: RateLimits
+    url: rate-limits/yuens-me-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/yuens-me-lifecycle.yml
+  - type: Conformance
+    url: conformance/yuens-me-conformance.yml
+- aid: yuens-me:yuens-me-query-api
+  name: Sunny Yuen Query API
+  description: The Query API from Sunny Yuen — 1 operation(s) for query.
+  humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  baseURL: https://agent.yuens.me
+  tags:
+  - Query
+  properties:
+  - type: OpenAPI
+    url: openapi/yuens-me-query-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/yuens1002/resume-agent#readme
+  - type: APIReference
+    url: https://github.com/yuens1002/resume-agent#public-api-endpoints
+  - type: GettingStarted
+    url: https://github.com/yuens1002/resume-agent#add-as-a-custom-connector-in-claude
+  - type: SourceCode
+    url: https://github.com/yuens1002/resume-agent
+  - type: ToolCrosswalk
+    url: mcp/yuens-me-tool-crosswalk.yml
+  - type: Authentication
+    url: authentication/yuens-me-authentication.yml
+  - type: Conventions
+    url: conventions/yuens-me-conventions.yml
+  - type: ErrorCatalog
+    url: errors/yuens-me-problem-types.yml
+  - type: DataModel
+    url: data-model/yuens-me-data-model.yml
+  - type: RateLimits
+    url: rate-limits/yuens-me-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/yuens-me-lifecycle.yml
+  - type: Conformance
+    url: conformance/yuens-me-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/yuens-me-mcp.yml
+- type: Overlay
+  url: overlays/yuens-me-openapi-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
 - type: DomainSecurity
   url: security/yuens-me-domain-security.yml
 - type: Website
@@ -146,3 +311,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 29
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://agent.yuens.me/.well-known/agent-card.json"
+  grade: "near-conformant"
+  protocol_version: "1.0"
+  control: 404
