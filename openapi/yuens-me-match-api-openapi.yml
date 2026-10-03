@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Yuens Me Match API
+  title: Resume Agent Match API
+  description: Query a candidate's professional profile. Use queryProfile for natural language questions, matchJob to score against a job description, and the GET endpoints for structured profile data.
   version: 1.0.0
-  description: 'Operations tagged Match across 2 of this provider''s published API definitions: yuens-me-resume-agent-openapi.json, yuens-me-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://agent.yuens.me
 tags:
@@ -113,8 +113,3 @@ paths:
                               description: verified = backed by a dated project or employment record; claimed = prose only; absent = no support found
       tags:
       - Match
-    servers:
-    - url: https://agent.yuens.me
-x-refined-from:
-- yuens-me-resume-agent-openapi.json
-- yuens-me-openapi.yml
