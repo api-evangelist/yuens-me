@@ -200,6 +200,8 @@ apis:
   humanURL: https://github.com/yuens1002/resume-agent#public-api-endpoints
   baseURL: https://agent.yuens.me
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -268,6 +270,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/yuens-me-capability-edges.yml
+  name: Sunny Yuen Business Capability Map
 - type: MCPServer
   url: mcp/yuens-me-mcp.yml
 - type: Overlay
