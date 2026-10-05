@@ -1,0 +1,12 @@
+{
+ "url": "https://agent.yuens.me/openapi.json",
+ "requested_url": "https://agent.yuens.me/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 9977,
+ "sha256": "5cc2aebd0ca84b68da3fb09c0762ee7dadc126b66e2104279295493297091540",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
