@@ -108,3 +108,9 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools:
+- name: ask_candidate
+  description: Ask a natural-language question about this candidate's skills, experience, or background.
+    Responses are grounded in the candidate's canonical published profile — not inferred by the calling
+    AI. Use this when a recruiter, hiring manager, or screening tool needs answers about the candidate.
+tools_count: 1
