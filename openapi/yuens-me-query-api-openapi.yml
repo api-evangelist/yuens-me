@@ -86,3 +86,9 @@ paths:
                     description: True when the question asked about the candidate's fit/suitability for a role and was answered in prose (narrate-first). Clients with an interactive fit-check flow should offer it as an explicit follow-up when this is true.
       tags:
       - Query
+x-provenance:
+  method: harvested
+  publisher: Sunny Yuen
+  source: https://agent.yuens.me/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
