@@ -12,6 +12,9 @@ artifacts:
   authentication/yuens-me-authentication.yml:
     method: searched
     evidence: declared in the artifact
+  capabilities/yuens-me-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/yuens-me-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -30,7 +33,10 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
+  integrations/yuens-me-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-19T193153.yml:
@@ -63,6 +69,21 @@ artifacts:
   kin/score-2026-09-24T161608.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/yuens-me-lifecycle.yml:
     method: searched
     evidence: declared in the artifact
@@ -78,16 +99,34 @@ artifacts:
   mcp/yuens-me-tool-crosswalk.yml:
     method: derived
     evidence: declared in the artifact
+  openapi/_original/yuens-me-openapi.yml:
+    method: harvested
+    evidence: the same operations as https://agent.yuens.me/openapi.json (sha256 5cc2aebd0ca8, fetched
+      2026-10-04)
   openapi/_original/yuens-me-resume-agent-openapi.json:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
-  openapi/yuens-me-openapi.yml:
+    evidence: byte-identical to https://agent.yuens.me/openapi.json (sha256 5cc2aebd0ca8, fetched 2026-10-04)
+  openapi/yuens-me-availability-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/yuens-me-info-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/yuens-me-match-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/yuens-me-observations-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/yuens-me-projects-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/yuens-me-query-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   overlays/yuens-me-openapi-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   packages/yuens-me-packages.yml:
     method: searched
     evidence: declared in the artifact
